@@ -65,7 +65,7 @@ const createApplePaySession = () => {
   session.onpaymentauthorized = function (event) {
     alert(`onpaymentauthorized -  ${JSON.stringify(event)}`);
 
-    completePayment({ status: 0 });
+    // completePayment({ status: 0 });
   };
 };
 
