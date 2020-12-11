@@ -1,15 +1,5 @@
+import React from "react";
 import "./App.css";
-
-let canApplePay = false;
-let activeCardSetup = false;
-
-if (window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
-  if (window.ApplePaySession.canMakePaymentsWithActiveCard()) {
-    activeCardSetup = true;
-  } else {
-    canApplePay = true;
-  }
-}
 
 const createApplePaySession = () => {
   const session = new window.ApplePaySession(3, {
@@ -70,8 +60,21 @@ const createApplePaySession = () => {
 };
 
 function App() {
+  let canApplePay = false;
+
+  const [canCheckout, showCheckout] = React.useState(false);
+
+  if (window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
+    canApplePay = true;
+
+    var promise = window.ApplePaySession.canMakePaymentsWithActiveCard("test");
+    promise.then(function (canMakePayments) {
+      showCheckout(canMakePayments);
+    });
+  }
+
   if (canApplePay) {
-    if (!activeCardSetup) {
+    if (!canCheckout) {
       return (
         <div className="apple-div">
           <button className="apple-pay" onClick={createApplePaySession}>
